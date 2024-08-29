@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weaviate Data Viewer</title>
+    <title>Weaviate Data Manager</title>
+    <link rel="stylesheet" href="/src/styles/main.css">
   </head>
   <body>
     <div id="app">
-      <h1>Weaviate Data Viewer</h1>
+      <h1>Weaviate Data Manager</h1>
+      <form id="articleForm">
+        <div class="form-group">
+          <label for="title">タイトル</label>
+          <input type="text" id="title" placeholder="タイトルを入力" required>
+        </div>
+        <div class="form-group">
+          <label for="content">内容</label>
+          <textarea id="content" placeholder="内容を入力" required></textarea>
+        </div>
+        <button type="submit">登録</button>
+      </form>
       <table id="dataTable">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Content</th>
+            <th>タイトル</th>
+            <th>内容</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody></tbody>
