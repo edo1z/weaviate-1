@@ -30,6 +30,24 @@
         </thead>
         <tbody></tbody>
       </table>
+      <div id="editModal" class="modal">
+        <div class="modal-content">
+          <h2>記事を編集</h2>
+          <form id="editForm">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+              <label for="editTitle">タイトル</label>
+              <input type="text" id="editTitle" required>
+            </div>
+            <div class="form-group">
+              <label for="editContent">内容</label>
+              <textarea id="editContent" required></textarea>
+            </div>
+            <button type="submit">更新</button>
+            <button type="button" id="cancelEdit">キャンセル</button>
+          </form>
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -81,6 +81,24 @@ async function deleteData(id: string) {
   }
 }
 
+async function editData(id: string, article: Article) {
+  try {
+    await client.data
+      .updater()
+      .withClassName('Article')
+      .withId(id)
+      .withProperties({
+        title: article.title,
+        content: article.content
+      })
+      .do();
+    console.log('Data updated successfully');
+    await getData();
+  } catch (error) {
+    console.error('Error updating data:', error);
+  }
+}
+
 function updateTable(articles: Article[]) {
   const tbody = document.querySelector('#dataTable tbody');
   if (tbody) {
@@ -88,7 +106,10 @@ function updateTable(articles: Article[]) {
       <tr>
         <td>${article.title}</td>
         <td>${article.content}</td>
-        <td><button class="delete-btn" data-id="${article._additional?.id}">削除</button></td>
+        <td class="button-group">
+          <button class="edit-btn" data-id="${article._additional?.id}">編集</button>
+          <button class="delete-btn" data-id="${article._additional?.id}">削除</button>
+        </td>
       </tr>
     `).join('');
 
@@ -100,7 +121,48 @@ function updateTable(articles: Article[]) {
         }
       });
     });
+
+    tbody.querySelectorAll('.edit-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const id = (e.target as HTMLButtonElement).dataset.id;
+        const row = (e.target as HTMLButtonElement).closest('tr');
+        if (id && row) {
+          const title = row.cells[0].textContent || '';
+          const content = row.cells[1].textContent || '';
+          openEditModal(id, title, content);
+        }
+      });
+    });
   }
+}
+
+function openEditModal(id: string, title: string, content: string) {
+  const modal = document.getElementById('editModal') as HTMLDivElement;
+  const editForm = document.getElementById('editForm') as HTMLFormElement;
+  const editId = document.getElementById('editId') as HTMLInputElement;
+  const editTitle = document.getElementById('editTitle') as HTMLInputElement;
+  const editContent = document.getElementById('editContent') as HTMLTextAreaElement;
+  const cancelEdit = document.getElementById('cancelEdit') as HTMLButtonElement;
+
+  editId.value = id;
+  editTitle.value = title;
+  editContent.value = content;
+
+  modal.style.display = 'block';
+
+  editForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const updatedArticle: Article = {
+      title: editTitle.value,
+      content: editContent.value,
+    };
+    await editData(editId.value, updatedArticle);
+    modal.style.display = 'none';
+  };
+
+  cancelEdit.onclick = () => {
+    modal.style.display = 'none';
+  };
 }
 
 async function main() {
