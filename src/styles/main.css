@@ -87,7 +87,7 @@ th {
 .button-group {
   display: flex;
   gap: 10px;
-  width: 120px;
+  min-width: 120px;
 }
 
 .edit-btn, .delete-btn {
