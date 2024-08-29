@@ -4,6 +4,9 @@ interface Article {
   id?: string;
   title: string;
   content: string;
+  _additional?: {
+    id: string;
+  };
 }
 
 const client: WeaviateClient = weaviate.client({
@@ -41,7 +44,10 @@ async function addData(article: Article) {
     const result = await client.data
       .creator()
       .withClassName('Article')
-      .withProperties(article)
+      .withProperties({
+        title: article.title,
+        content: article.content
+      })
       .do();
     console.log('Data added successfully');
     return result;
@@ -82,7 +88,7 @@ function updateTable(articles: Article[]) {
       <tr>
         <td>${article.title}</td>
         <td>${article.content}</td>
-        <td><button class="delete-btn" data-id="${article._additional.id}">削除</button></td>
+        <td><button class="delete-btn" data-id="${article._additional?.id}">削除</button></td>
       </tr>
     `).join('');
 
